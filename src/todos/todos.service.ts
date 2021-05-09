@@ -45,6 +45,6 @@ export class TodosService {
   }
 
   async removeAll() {
-    return {};
+    await this.todoModel.deleteMany();
   }
 }
