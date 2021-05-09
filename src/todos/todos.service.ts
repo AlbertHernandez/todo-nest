@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateTodoDto } from './dto/create-todo-dto';
+import { UpdateTodoDto } from './dto/update-todo-dto';
 
 @Injectable()
 export class TodosService {
@@ -10,12 +12,12 @@ export class TodosService {
     return [];
   }
 
-  async create() {
-    return {};
+  async create(createTodoDto: CreateTodoDto) {
+    return createTodoDto;
   }
 
-  async update(id: string) {
-    return {};
+  async update(id: string, updateTodoDto: UpdateTodoDto) {
+    return updateTodoDto;
   }
 
   async remove(id: string) {

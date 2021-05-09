@@ -1,5 +1,15 @@
-import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { AccountsService } from './accounts.service';
+import { CreateAccountDto } from './dto/create-account-dto';
+import { UpdateAccountDto } from './dto/update-account-dto';
 
 @Controller('api/v1/accounts')
 export class AccountsController {
@@ -16,13 +26,16 @@ export class AccountsController {
   }
 
   @Post()
-  async create() {
-    return await this.accountsService.create();
+  async create(@Body() createAccountDto: CreateAccountDto) {
+    return await this.accountsService.create(createAccountDto);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string) {
-    return await this.accountsService.update(id);
+  async update(
+    @Param('id') id: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    return await this.accountsService.update(id, updateAccountDto);
   }
 
   @Delete(':id')
