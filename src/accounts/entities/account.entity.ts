@@ -17,6 +17,12 @@ export class Account extends mongoose.Document {
 
   @Prop({ index: true, required: true, unique: true })
   email: string;
+
+  @Prop({ type: Date, default: Date.now })
+  updatedAt: boolean;
+
+  @Prop({ type: Date, default: Date.now })
+  createdAt: boolean;
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);

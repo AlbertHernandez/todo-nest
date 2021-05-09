@@ -23,6 +23,12 @@ export class Todo extends mongoose.Document {
 
   @Prop()
   isCompleted: boolean;
+
+  @Prop({ type: Date, default: Date.now })
+  updatedAt: boolean;
+
+  @Prop({ type: Date, default: Date.now })
+  createdAt: boolean;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);
