@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { environmentVariablesSchema } from './schemas';
-import {
-  getDatabaseConfig,
-  getServerConfig,
-} from './config';
+import { getDatabaseConfig, getServerConfig } from './config';
 
 @Module({
   imports: [
