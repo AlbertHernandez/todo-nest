@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
+import { ErrorMessage } from '../database/constants';
+import { AccountDuplicatedException } from './exceptions';
 
 @Injectable()
 export class AccountRepository {
@@ -26,7 +28,17 @@ export class AccountRepository {
   }
 
   async create(createAccountDto: CreateAccountDto) {
-    const account = await this.accountModel.create(createAccountDto);
+    let account = null;
+    try {
+      account = await this.accountModel.create(createAccountDto);
+    } catch (error) {
+      if (error.message.includes(ErrorMessage.Duplicate) === true) {
+        throw new AccountDuplicatedException({
+          values: error.keyValue,
+        });
+      }
+      throw error;
+    }
     return account ? this.mapToAccount(account) : null;
   }
 

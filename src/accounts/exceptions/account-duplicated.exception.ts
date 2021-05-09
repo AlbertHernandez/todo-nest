@@ -1,9 +1,9 @@
 import { NotAcceptableException } from '@nestjs/common';
 
-export class DuplicatedTodoException extends NotAcceptableException {
+export class AccountDuplicatedException extends NotAcceptableException {
   constructor(context: any) {
     super({
-      message: 'Duplicated Todo',
+      message: 'Duplicated Account',
       ...context,
     });
   }

@@ -4,6 +4,8 @@ import { UpdateTodoDto } from './dto/update-todo-dto';
 import { LeanDocument, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TodoDocument, Todo } from './entities/todo.entity';
+import { ErrorMessage } from '../database/constants';
+import { DuplicatedTodoException } from './exceptions';
 
 @Injectable()
 export class TodosRepository {
@@ -25,7 +27,17 @@ export class TodosRepository {
   }
 
   async create(createTodoDto: CreateTodoDto) {
-    const todo = await this.todoModel.create(createTodoDto);
+    let todo = null;
+    try {
+      todo = await this.todoModel.create(createTodoDto);
+    } catch (error) {
+      if (error.message.includes(ErrorMessage.Duplicate) === true) {
+        throw new DuplicatedTodoException({
+          values: error.keyValue,
+        });
+      }
+      throw error;
+    }
     return todo ? this.mapToTodo(todo) : null;
   }
 
