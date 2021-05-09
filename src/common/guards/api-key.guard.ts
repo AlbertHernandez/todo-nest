@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
+import { Identifiers } from '../../configuration/constants';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
@@ -21,6 +22,6 @@ export class ApiKeyGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest<Request>();
     const authHeader = request.header('api-key');
-    return authHeader === this.configService.get('apiKey');
+    return authHeader === this.configService.get(Identifiers.ApiKey);
   }
 }
