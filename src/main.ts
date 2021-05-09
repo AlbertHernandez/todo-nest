@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { UnifiedResponseInterceptor } from './common/interceptors/unified-response.interceptor';
+import { requestIdMiddleware } from './common/middlewares';
 import { ConfigIdentifier } from './configuration/constants';
 
 async function bootstrap() {
@@ -17,6 +18,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.use(requestIdMiddleware());
 
   const configService = app.get(ConfigService);
 
