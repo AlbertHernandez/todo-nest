@@ -5,23 +5,24 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Todo } from './entities/todo.entity';
 import { AccountsService } from '../accounts/accounts.service';
+import { TodosRepository } from './todos.repository';
 
 @Injectable()
 export class TodosService {
   constructor(
-    @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
     private readonly accountsService: AccountsService,
     private readonly logger: Logger,
+    private readonly todosRepository: TodosRepository,
   ) {
     this.logger.setContext(TodosService.name);
   }
 
   async findAll() {
-    return await this.todoModel.find();
+    return await this.todosRepository.findAll();
   }
 
   async findOne(id: string) {
-    const todo = await this.todoModel.findOne({ id }).exec();
+    const todo = await this.todosRepository.findOne(id);
     if (!todo) {
       throw new NotFoundException(`Todo #${id} not found`);
     }
@@ -47,7 +48,7 @@ export class TodosService {
       throw new NotFoundException(`Author "${createTodoDto.author}" not found`);
     }
 
-    const todo = await this.todoModel.create(createTodoDto);
+    const todo = await this.todosRepository.create(createTodoDto);
 
     this.logger.verbose({
       msg: 'Todo created successfully',
@@ -68,9 +69,7 @@ export class TodosService {
       },
     });
 
-    const updatedTodo = await this.todoModel
-      .findOneAndUpdate({ id }, { $set: updateTodoDto }, { new: true })
-      .exec();
+    const updatedTodo = await this.todosRepository.update(id, updateTodoDto);
 
     if (!updatedTodo) {
       this.logger.error({
@@ -102,7 +101,7 @@ export class TodosService {
       },
     });
 
-    await this.todoModel.remove(id);
+    await this.todosRepository.remove(id);
 
     this.logger.verbose({
       msg: 'Todo removed',
@@ -117,7 +116,7 @@ export class TodosService {
       msg: 'Removing All todos...',
     });
 
-    await this.todoModel.deleteMany();
+    await this.todosRepository.removeAll();
 
     this.logger.verbose({
       msg: 'Removed all todos',
