@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
-import { Model } from 'mongoose';
+import { LeanDocument, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TodoDocument, Todo } from './entities/todo.entity';
 
@@ -20,7 +20,7 @@ export class TodosRepository {
   }
 
   async findOne(id: string) {
-    const todo = await this.todoModel.findOne({ id }).exec();
+    const todo = await this.todoModel.findOne({ id }).lean().exec();
     return todo ? this.mapToTodo(todo) : null;
   }
 
@@ -32,6 +32,7 @@ export class TodosRepository {
   async update(id: string, updateTodoDto: UpdateTodoDto) {
     const todo = await this.todoModel
       .findOneAndUpdate({ id }, { $set: updateTodoDto }, { new: true })
+      .lean()
       .exec();
 
     return this.mapToTodo(todo);
@@ -45,7 +46,7 @@ export class TodosRepository {
     await this.todoModel.deleteMany();
   }
 
-  private mapToTodo(todoDocument: TodoDocument): Todo {
+  private mapToTodo(todoDocument: LeanDocument<TodoDocument>): Todo {
     return {
       id: todoDocument.id,
       author: todoDocument.author,

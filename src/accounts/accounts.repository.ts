@@ -1,7 +1,7 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Account, AccountDocument } from './entities/account.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { LeanDocument, Model } from 'mongoose';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 
@@ -16,7 +16,7 @@ export class AccountRepository {
   }
 
   async findAll() {
-    const accounts = await this.accountModel.find();
+    const accounts = await this.accountModel.find().lean();
     return accounts.map((account) => this.mapToAccount(account));
   }
 
@@ -33,6 +33,7 @@ export class AccountRepository {
   async update(id: string, updateAccountDto: UpdateAccountDto) {
     const account = await this.accountModel
       .findOneAndUpdate({ id }, { $set: updateAccountDto }, { new: true })
+      .lean()
       .exec();
     return this.mapToAccount(account);
   }
@@ -47,7 +48,9 @@ export class AccountRepository {
     await this.accountModel.deleteMany();
   }
 
-  private mapToAccount(accountDocument: AccountDocument): Account {
+  private mapToAccount(
+    accountDocument: LeanDocument<AccountDocument>,
+  ): Account {
     return {
       id: accountDocument.id,
       name: accountDocument.name,
