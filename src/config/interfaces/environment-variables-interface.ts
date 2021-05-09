@@ -1,3 +1,4 @@
+import { Database } from '../../database/interfaces';
 import { Environment } from '../constants';
 
 export interface EnvironmentVariables {
@@ -5,9 +6,7 @@ export interface EnvironmentVariables {
   test: boolean;
   beta: boolean;
   production: boolean;
-  mongo: {
-    url: string;
-  };
+  database: Database;
   port: number;
   apiKey: string;
   environment: Environment;

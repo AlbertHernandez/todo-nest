@@ -3,10 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './todos/todos.module';
 import { AccountsModule } from './accounts/accounts.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { CommonModule } from './common/common.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -16,16 +16,7 @@ import { CommonModule } from './common/common.module';
     CommonModule,
     TodosModule,
     AccountsModule,
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      async useFactory(configService: ConfigService) {
-        return {
-          uri: configService.get<string>('mongo.url'),
-          useCreateIndex: true,
-        };
-      },
-      inject: [ConfigService],
-    }),
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

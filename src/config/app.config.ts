@@ -17,7 +17,7 @@ export default (): EnvironmentVariables => ({
   test: isNodeEnv(Environment.Test),
   beta: isNodeEnv(Environment.Beta),
   production: isNodeEnv(Environment.Production),
-  mongo: {
+  database: {
     url: process.env.MONGO_URI ?? '',
   },
   port: Number(process.env.PORT ?? 3000),
