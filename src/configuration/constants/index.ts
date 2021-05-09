@@ -1,2 +1,2 @@
 export * from './environment.constant';
-export * from './identifiers.constant';
+export * from './config-identifier.constant';

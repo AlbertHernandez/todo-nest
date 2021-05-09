@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Database } from './interfaces';
-import { Identifiers } from '../configuration/constants';
+import { ConfigIdentifier } from '../configuration/constants';
+import { DatabaseConfig } from 'src/configuration/interfaces';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       async useFactory(configService: ConfigService) {
-        const databaseConfig = configService.get<Database>(
-          Identifiers.Database,
+        const databaseConfig = configService.get<DatabaseConfig>(
+          ConfigIdentifier.Database,
         );
         return {
           uri: databaseConfig.url,
