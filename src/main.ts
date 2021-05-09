@@ -1,4 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { UnifiedResponseInterceptor } from './common/interceptors/unified-response.interceptor';
@@ -16,6 +17,10 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+
+  const appPort = configService.get('port');
+
+  await app.listen(appPort);
 }
 bootstrap();
