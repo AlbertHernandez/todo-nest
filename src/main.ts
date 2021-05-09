@@ -1,9 +1,12 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { UnifiedResponseInterceptor } from './common/interceptors/unified-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalInterceptors(new UnifiedResponseInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({
