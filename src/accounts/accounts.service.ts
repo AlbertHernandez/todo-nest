@@ -15,17 +15,14 @@ export class AccountsService {
     return await this.accountModel.find();
   }
 
-  async findOne(id: string) {
-    const account = await this.accountModel.findOne({ id }).exec();
-    if (!account) {
-      throw new NotFoundException(`Account #${id} not found`);
-    }
-    return account;
+  async findByEmail(email: string): Promise<Account | null> {
+    const account = await this.accountModel.findOne({ email }).exec();
+    return account || null;
   }
 
   async create(createTodoDto: CreateAccountDto) {
-    const account = new this.accountModel(createTodoDto);
-    return await account.save();
+    const account = await this.accountModel.create(createTodoDto);
+    return account;
   }
 
   async update(id: string, updateAccountDto: UpdateAccountDto) {
@@ -36,12 +33,14 @@ export class AccountsService {
     if (!existingAccount) {
       throw new NotFoundException(`Account #${id} not found`);
     }
+
     return existingAccount;
   }
 
   async remove(id: string) {
-    const account = await this.findOne(id);
-    return await account.remove();
+    await this.accountModel.deleteOne({
+      id,
+    });
   }
 
   async removeAll() {

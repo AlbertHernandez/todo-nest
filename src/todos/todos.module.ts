@@ -3,6 +3,7 @@ import { TodosController } from './todos.controller';
 import { TodosService } from './todos.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Todo, TodoSchema } from './entities/todo.entity';
+import { AccountsModule } from '../accounts/accounts.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Todo, TodoSchema } from './entities/todo.entity';
         schema: TodoSchema,
       },
     ]),
+    AccountsModule,
   ],
   controllers: [TodosController],
   providers: [TodosService],

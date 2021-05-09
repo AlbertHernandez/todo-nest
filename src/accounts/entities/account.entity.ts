@@ -10,7 +10,6 @@ export class Account extends mongoose.Document {
     unique: true,
     default: () => generateUuid(),
   })
-  @Prop()
   id: string;
 
   @Prop({ required: true })

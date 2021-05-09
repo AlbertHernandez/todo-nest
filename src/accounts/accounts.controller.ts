@@ -20,9 +20,9 @@ export class AccountsController {
     return await this.accountsService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.accountsService.findOne(id);
+  @Get(':email')
+  async findOne(@Param('email') email: string) {
+    return await this.accountsService.findByEmail(email);
   }
 
   @Post()

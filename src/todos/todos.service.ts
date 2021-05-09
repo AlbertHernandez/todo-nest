@@ -4,11 +4,13 @@ import { UpdateTodoDto } from './dto/update-todo-dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Todo } from './entities/todo.entity';
+import { AccountsService } from '../accounts/accounts.service';
 
 @Injectable()
 export class TodosService {
   constructor(
     @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
+    private readonly accountsService: AccountsService,
   ) {}
 
   async findAll() {
@@ -24,8 +26,16 @@ export class TodosService {
   }
 
   async create(createTodoDto: CreateTodoDto) {
-    const todo = new this.todoModel(createTodoDto);
-    return await todo.save();
+    const account = await this.accountsService.findByEmail(
+      createTodoDto.author,
+    );
+
+    if (!account) {
+      throw new NotFoundException(`Author "${createTodoDto.author}" not found`);
+    }
+
+    const todo = await this.todoModel.create(createTodoDto);
+    return todo;
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto) {
@@ -36,12 +46,12 @@ export class TodosService {
     if (!existingTodo) {
       throw new NotFoundException(`Todo #${id} not found`);
     }
+
     return existingTodo;
   }
 
   async remove(id: string) {
-    const todo = await this.findOne(id);
-    return await todo.remove();
+    await this.todoModel.remove(id);
   }
 
   async removeAll() {
