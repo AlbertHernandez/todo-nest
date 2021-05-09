@@ -27,7 +27,7 @@ export class AccountRepository {
 
   async create(createAccountDto: CreateAccountDto) {
     const account = await this.accountModel.create(createAccountDto);
-    return this.mapToAccount(account);
+    return account ? this.mapToAccount(account) : null;
   }
 
   async update(id: string, updateAccountDto: UpdateAccountDto) {
@@ -35,7 +35,7 @@ export class AccountRepository {
       .findOneAndUpdate({ id }, { $set: updateAccountDto }, { new: true })
       .lean()
       .exec();
-    return this.mapToAccount(account);
+    return account ? this.mapToAccount(account) : null;
   }
 
   async remove(id: string) {

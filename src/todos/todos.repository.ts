@@ -26,7 +26,7 @@ export class TodosRepository {
 
   async create(createTodoDto: CreateTodoDto) {
     const todo = await this.todoModel.create(createTodoDto);
-    return this.mapToTodo(todo);
+    return todo ? this.mapToTodo(todo) : null;
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto) {
@@ -35,7 +35,7 @@ export class TodosRepository {
       .lean()
       .exec();
 
-    return this.mapToTodo(todo);
+    return todo ? this.mapToTodo(todo) : null;
   }
 
   async remove(id: string) {
