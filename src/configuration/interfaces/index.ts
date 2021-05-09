@@ -1,1 +1,1 @@
-export * from './environment-variables-interface';
+export * from './environment-variables.interface';

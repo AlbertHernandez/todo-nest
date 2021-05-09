@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import appConfig from './app.config';
+import { environmentVariablesSchema } from './schemas';
+import { getEnvironmentVariables } from './environment-variables';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig],
+      load: [getEnvironmentVariables],
+      validationSchema: environmentVariablesSchema,
     }),
   ],
 })
