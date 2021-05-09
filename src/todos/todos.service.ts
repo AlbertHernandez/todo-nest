@@ -1,9 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Todo } from './entities/todo.entity';
 import { AccountsService } from '../accounts/accounts.service';
 import { TodosRepository } from './todos.repository';
 

@@ -2,8 +2,10 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { generateUuid } from 'src/common/helpers';
 
+export type TodoDocument = Todo & mongoose.Document;
+
 @Schema()
-export class Todo extends mongoose.Document {
+export class Todo {
   @Prop({
     index: true,
     required: true,

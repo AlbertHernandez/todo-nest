@@ -1,3 +1,4 @@
+import { LoggerLevel } from 'src/logger/constants/logger-level.constant';
 import { Environment } from '../constants';
 
 export interface ServerConfig {
@@ -8,4 +9,5 @@ export interface ServerConfig {
   port: number;
   apiKey: string;
   environment: Environment;
+  loggerLevel: LoggerLevel;
 }

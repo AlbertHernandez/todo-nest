@@ -1,3 +1,4 @@
+import { LoggerLevel } from 'src/logger/constants/logger-level.constant';
 import { Environment } from '../constants';
 import { ServerConfig } from '../interfaces';
 
@@ -12,5 +13,6 @@ export const getServerConfig = (): { server: ServerConfig } => ({
     port: Number(process.env.PORT),
     environment: process.env.NODE_ENV as Environment,
     apiKey: process.env.API_KEY,
+    loggerLevel: process.env.LOGGER_LEVEL as LoggerLevel,
   },
 });

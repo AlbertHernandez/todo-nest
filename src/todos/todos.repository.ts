@@ -3,33 +3,38 @@ import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Todo } from './entities/todo.entity';
+import { TodoDocument, Todo } from './entities/todo.entity';
 
 @Injectable()
 export class TodosRepository {
   constructor(
-    @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
+    @InjectModel(Todo.name) private readonly todoModel: Model<TodoDocument>,
     private readonly logger: Logger,
   ) {
     this.logger.setContext(TodosRepository.name);
   }
 
   async findAll() {
-    return await this.todoModel.find();
+    const todos = await this.todoModel.find();
+    return todos.map((todo) => this.mapToTodo(todo));
   }
 
   async findOne(id: string) {
-    return await this.todoModel.findOne({ id }).exec();
+    const todo = await this.todoModel.findOne({ id }).exec();
+    return todo ? this.mapToTodo(todo) : null;
   }
 
   async create(createTodoDto: CreateTodoDto) {
-    return await this.todoModel.create(createTodoDto);
+    const todo = await this.todoModel.create(createTodoDto);
+    return this.mapToTodo(todo);
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto) {
-    return await this.todoModel
+    const todo = await this.todoModel
       .findOneAndUpdate({ id }, { $set: updateTodoDto }, { new: true })
       .exec();
+
+    return this.mapToTodo(todo);
   }
 
   async remove(id: string) {
@@ -38,5 +43,17 @@ export class TodosRepository {
 
   async removeAll() {
     await this.todoModel.deleteMany();
+  }
+
+  private mapToTodo(todoDocument: TodoDocument): Todo {
+    return {
+      id: todoDocument.id,
+      author: todoDocument.author,
+      title: todoDocument.title,
+      content: todoDocument.content,
+      isCompleted: todoDocument.isCompleted,
+      updatedAt: todoDocument.updatedAt,
+      createdAt: todoDocument.createdAt,
+    };
   }
 }
