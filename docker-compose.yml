@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  mongo-todo-nest:
+    container_name: mongo-todo-nest
+    image: 'mongo:4.2.6'
+    volumes:
+      - ./mongo-data:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_DATA_DIR: /mongo-data
+      MONGO_LOG_DIR: /dev/null
+      MONGODB_DATABASE: todo-nest-dev
+    command: mongod
+    networks:
+      - default
+
+volumes:
+  mongo-data:
