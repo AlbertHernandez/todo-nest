@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateAccountDto } from './dto/create-account-dto';
@@ -9,7 +9,10 @@ import { Account } from './entities/account.entity';
 export class AccountsService {
   constructor(
     @InjectModel(Account.name) private readonly accountModel: Model<Account>,
-  ) {}
+    private readonly logger: Logger,
+  ) {
+    this.logger.setContext(AccountsService.name);
+  }
 
   async findAll() {
     return await this.accountModel.find();
@@ -20,30 +23,73 @@ export class AccountsService {
     return account || null;
   }
 
-  async create(createTodoDto: CreateAccountDto) {
-    const account = await this.accountModel.create(createTodoDto);
+  async create(createAccountDto: CreateAccountDto) {
+    this.logger.verbose({
+      msg: 'Creating account.',
+      context: { createAccountDto },
+    });
+
+    const account = await this.accountModel.create(createAccountDto);
+
+    this.logger.verbose({
+      msg: 'Account created successfully',
+      context: { account },
+    });
+
     return account;
   }
 
   async update(id: string, updateAccountDto: UpdateAccountDto) {
-    const existingAccount = await this.accountModel
+    this.logger.verbose({
+      msg: 'Updating account...',
+      context: { id, updateAccountDto },
+    });
+
+    const updatedAccount = await this.accountModel
       .findOneAndUpdate({ id }, { $set: updateAccountDto }, { new: true })
       .exec();
 
-    if (!existingAccount) {
+    if (!updatedAccount) {
+      this.logger.error({
+        msg: 'Account does not exist!',
+        context: { id, updateAccountDto },
+      });
       throw new NotFoundException(`Account #${id} not found`);
     }
 
-    return existingAccount;
+    this.logger.verbose({
+      msg: 'Account updated successfully!',
+      context: { updatedAccount },
+    });
+
+    return updatedAccount;
   }
 
   async remove(id: string) {
+    this.logger.verbose({
+      msg: 'Removing account...',
+      context: { id },
+    });
+
     await this.accountModel.deleteOne({
       id,
+    });
+
+    this.logger.verbose({
+      msg: 'Account removed successfully',
+      context: { id },
     });
   }
 
   async removeAll() {
+    this.logger.verbose({
+      msg: 'Removing all account...',
+    });
+
     await this.accountModel.deleteMany();
+
+    this.logger.verbose({
+      msg: 'All accounts removed successfully',
+    });
   }
 }
