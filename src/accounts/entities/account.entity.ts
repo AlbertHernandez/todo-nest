@@ -1,9 +1,15 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { generateUuid } from '../../common/helpers';
 
 @Schema()
 export class Account extends mongoose.Document {
-  @Prop({ index: true, required: true, unique: true })
+  @Prop({
+    index: true,
+    required: true,
+    unique: true,
+    default: () => generateUuid(),
+  })
   @Prop()
   id: string;
 

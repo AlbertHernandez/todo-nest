@@ -1,27 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Todo } from './entities/todo.entity';
 
 @Injectable()
 export class TodosService {
+  constructor(
+    @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
+  ) {}
+
   async findAll() {
-    return [];
+    return await this.todoModel.find();
   }
 
   async findOne(id: string) {
-    return [];
+    const todo = await this.todoModel.findOne({ id }).exec();
+    if (!todo) {
+      throw new NotFoundException(`Todo #${id} not found`);
+    }
+    return todo;
   }
 
   async create(createTodoDto: CreateTodoDto) {
-    return createTodoDto;
+    const todo = new this.todoModel(createTodoDto);
+    return await todo.save();
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto) {
-    return updateTodoDto;
+    const existingTodo = await this.todoModel
+      .findOneAndUpdate({ id }, { $set: updateTodoDto }, { new: true })
+      .exec();
+
+    if (!existingTodo) {
+      throw new NotFoundException(`Todo #${id} not found`);
+    }
+    return existingTodo;
   }
 
   async remove(id: string) {
-    return {};
+    const todo = await this.findOne(id);
+    return await todo.remove();
   }
 
   async removeAll() {
