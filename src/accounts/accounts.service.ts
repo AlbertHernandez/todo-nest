@@ -1,8 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AccountRepository } from './accounts.repository';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 import { Account } from './entities/account.entity';
+import { AccountNotFoundException } from './exceptions';
 
 @Injectable()
 export class AccountsService {
@@ -53,7 +54,7 @@ export class AccountsService {
         msg: 'Account does not exist!',
         context: { id, updateAccountDto },
       });
-      throw new NotFoundException(`Account #${id} not found`);
+      throw new AccountNotFoundException(id);
     }
 
     this.logger.verbose({

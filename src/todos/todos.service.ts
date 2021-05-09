@@ -3,6 +3,8 @@ import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
 import { AccountsService } from '../accounts/accounts.service';
 import { TodosRepository } from './todos.repository';
+import { AccountNotFoundException } from 'src/accounts/exceptions';
+import { TodoNotFoundException } from './exceptions/todo-not-found.exception';
 
 @Injectable()
 export class TodosService {
@@ -21,7 +23,7 @@ export class TodosService {
   async findOne(id: string) {
     const todo = await this.todosRepository.findOne(id);
     if (!todo) {
-      throw new NotFoundException(`Todo #${id} not found`);
+      throw new TodoNotFoundException(id);
     }
     return todo;
   }
@@ -77,7 +79,7 @@ export class TodosService {
         },
       });
 
-      throw new NotFoundException(`Todo #${id} not found`);
+      throw new TodoNotFoundException(id);
     }
 
     this.logger.verbose({
