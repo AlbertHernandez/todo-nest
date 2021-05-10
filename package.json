@@ -28,6 +28,8 @@
     "@nestjs/mapped-types": "^0.4.1",
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/platform-express": "^7.6.15",
+    "@sentry/node": "^6.3.6",
+    "@sentry/tracing": "^5.30.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "helmet": "^4.6.0",

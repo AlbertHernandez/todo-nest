@@ -12,4 +12,6 @@ export const environmentVariablesSchema = Joi.object({
   LOGGER_LEVEL: Joi.string()
     .valid(...Object.values(LoggerLevel))
     .default(LoggerLevel.Info),
+  IS_ENABLE_SENTRY: Joi.string().valid('true', 'false').default('false'),
+  SENTRY_DSN: Joi.string(),
 });
