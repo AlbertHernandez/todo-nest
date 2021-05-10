@@ -1,15 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AccountRepository } from './accounts.repository';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 import { Account } from './entities/account.entity';
 import { AccountNotFoundException } from './exceptions';
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class AccountsService {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
   ) {
     this.logger.setContext(AccountsService.name);
   }

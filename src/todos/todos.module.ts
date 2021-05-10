@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TodoSchema, Todo } from './entities/todo.entity';
 import { AccountsModule } from '../accounts/accounts.module';
 import { TodosRepository } from './todos.repository';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TodosRepository } from './todos.repository';
       },
     ]),
     AccountsModule,
+    LoggerModule,
   ],
   controllers: [TodosController],
   providers: [TodosService, Logger, TodosRepository],

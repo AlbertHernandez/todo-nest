@@ -5,13 +5,10 @@ import { AppModule } from './app.module';
 import { UnifiedResponseInterceptor } from './common/interceptors/unified-response.interceptor';
 import { requestIdMiddleware } from './common/middlewares';
 import { ConfigIdentifier } from './configuration/constants';
-import { LoggerService } from './logger/logger.service';
 import * as helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: false });
-
-  app.useLogger(app.get(LoggerService));
+  const app = await NestFactory.create(AppModule);
 
   app.useGlobalInterceptors(new UnifiedResponseInterceptor());
 

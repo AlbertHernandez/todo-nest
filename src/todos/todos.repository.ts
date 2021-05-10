@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
 import { LeanDocument, Model } from 'mongoose';
@@ -11,10 +11,7 @@ import { DuplicatedTodoException } from './exceptions';
 export class TodosRepository {
   constructor(
     @InjectModel(Todo.name) private readonly todoModel: Model<TodoDocument>,
-    private readonly logger: Logger,
-  ) {
-    this.logger.setContext(TodosRepository.name);
-  }
+  ) {}
 
   async findAll() {
     const todos = await this.todoModel.find();

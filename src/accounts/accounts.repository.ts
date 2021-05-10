@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Account, AccountDocument } from './entities/account.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
@@ -12,10 +12,7 @@ export class AccountRepository {
   constructor(
     @InjectModel(Account.name)
     private readonly accountModel: Model<AccountDocument>,
-    private readonly logger: Logger,
-  ) {
-    this.logger.setContext(AccountRepository.name);
-  }
+  ) {}
 
   async findAll() {
     const accounts = await this.accountModel.find().lean();
