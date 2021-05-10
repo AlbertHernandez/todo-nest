@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Account, AccountSchema } from './entities/account.entity';
 import { AccountsController } from './accounts.controller';
 import { AccountsService } from './accounts.service';
-import { AccountRepository } from './accounts.repository';
+import { AccountsRepository } from './accounts.repository';
 import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
@@ -17,7 +17,7 @@ import { LoggerModule } from 'src/logger/logger.module';
     LoggerModule,
   ],
   controllers: [AccountsController],
-  providers: [AccountsService, AccountRepository],
+  providers: [AccountsService, AccountsRepository],
   exports: [AccountsService],
 })
 export class AccountsModule {}

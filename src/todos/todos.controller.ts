@@ -3,17 +3,21 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
-import { TodosService } from './todos.service';
+import { TodosService } from './interfaces/todos-service.interface';
 
 @Controller('api/v1/todos')
 export class TodosController {
-  constructor(private readonly todosService: TodosService) {}
+  constructor(
+    @Inject('TodosService')
+    private readonly todosService: TodosService,
+  ) {}
 
   @Get()
   async findAll() {

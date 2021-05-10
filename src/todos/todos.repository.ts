@@ -6,9 +6,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { TodoDocument, Todo } from './entities/todo.entity';
 import { ErrorMessage } from '../database/constants';
 import { DuplicatedTodoException } from './exceptions';
+import { TodosRepository as ITodosRepository } from './interfaces/todos-repository.interface';
 
 @Injectable()
-export class TodosRepository {
+export class TodosRepository implements ITodosRepository {
   constructor(
     @InjectModel(Todo.name) private readonly todoModel: Model<TodoDocument>,
   ) {}

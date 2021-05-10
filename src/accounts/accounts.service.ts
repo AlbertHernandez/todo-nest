@@ -1,26 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { AccountRepository } from './accounts.repository';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 import { Account } from './entities/account.entity';
 import { AccountNotFoundException } from './exceptions';
 import { LoggerService } from '../logger/logger.service';
+import { AccountsService as IAccountsService } from './interfaces/accounts-service.interface';
+import { AccountsRepository } from './interfaces/accounts-repository.interface';
 
 @Injectable()
-export class AccountsService {
+export class AccountsService implements IAccountsService {
   constructor(
-    private readonly accountRepository: AccountRepository,
+    @Inject('AccountsRepository')
+    private readonly accountsRepository: AccountsRepository,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(AccountsService.name);
   }
 
   async findAll() {
-    return await this.accountRepository.findAll();
+    return await this.accountsRepository.findAll();
   }
 
   async findByEmail(email: string): Promise<Account | null> {
-    return await this.accountRepository.findByEmail(email);
+    return await this.accountsRepository.findByEmail(email);
   }
 
   async create(createAccountDto: CreateAccountDto) {
@@ -29,7 +31,7 @@ export class AccountsService {
       context: { createAccountDto },
     });
 
-    const account = await this.accountRepository.create(createAccountDto);
+    const account = await this.accountsRepository.create(createAccountDto);
 
     this.logger.verbose({
       msg: 'Account created successfully',
@@ -45,7 +47,7 @@ export class AccountsService {
       context: { id, updateAccountDto },
     });
 
-    const updatedAccount = await this.accountRepository.update(
+    const updatedAccount = await this.accountsRepository.update(
       id,
       updateAccountDto,
     );
@@ -72,7 +74,7 @@ export class AccountsService {
       context: { id },
     });
 
-    await this.accountRepository.remove(id);
+    await this.accountsRepository.remove(id);
 
     this.logger.verbose({
       msg: 'Account removed successfully',
@@ -85,7 +87,7 @@ export class AccountsService {
       msg: 'Removing all account...',
     });
 
-    await this.accountRepository.removeAll();
+    await this.accountsRepository.removeAll();
 
     this.logger.verbose({
       msg: 'All accounts removed successfully',

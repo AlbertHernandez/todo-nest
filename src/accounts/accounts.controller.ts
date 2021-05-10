@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -13,7 +14,10 @@ import { UpdateAccountDto } from './dto/update-account-dto';
 
 @Controller('api/v1/accounts')
 export class AccountsController {
-  constructor(private readonly accountsService: AccountsService) {}
+  constructor(
+    @Inject('AccountsService')
+    private readonly accountsService: AccountsService,
+  ) {}
 
   @Get()
   async findAll() {

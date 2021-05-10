@@ -6,9 +6,10 @@ import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 import { ErrorMessage } from '../database/constants';
 import { AccountDuplicatedException } from './exceptions';
+import { AccountsRepository as IAccountsRepository } from './interfaces/accounts-repository.interface';
 
 @Injectable()
-export class AccountRepository {
+export class AccountsRepository implements IAccountsRepository {
   constructor(
     @InjectModel(Account.name)
     private readonly accountModel: Model<AccountDocument>,
