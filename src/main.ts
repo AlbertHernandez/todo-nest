@@ -20,6 +20,8 @@ async function bootstrap() {
     }),
   );
 
+  app.setGlobalPrefix('api');
+
   app.use(requestIdMiddleware(), helmet());
 
   const configService = app.get(ConfigService);

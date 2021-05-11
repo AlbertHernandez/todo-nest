@@ -12,7 +12,7 @@ import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account-dto';
 import { UpdateAccountDto } from './dto/update-account-dto';
 
-@Controller('api/v1/accounts')
+@Controller('v1/accounts')
 export class AccountsController {
   constructor(
     @Inject('AccountsService')

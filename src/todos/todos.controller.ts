@@ -12,7 +12,7 @@ import { CreateTodoDto } from './dto/create-todo-dto';
 import { UpdateTodoDto } from './dto/update-todo-dto';
 import { TodosService } from './interfaces/todos-service.interface';
 
-@Controller('api/v1/todos')
+@Controller('v1/todos')
 export class TodosController {
   constructor(
     @Inject('TodosService')
