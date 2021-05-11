@@ -2,15 +2,16 @@ import * as Sentry from '@sentry/node';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SentryConfig, ServerConfig } from 'src/configuration/interfaces';
-import { ConfigIdentifier } from '../configuration/constants';
+import { ConfigIdentifier } from '../../configuration/constants';
+import { ErrorTracker } from '../error-tracker.interface';
 
 @Injectable()
-export class SentryService {
+export class SentryErrorTrackerService implements ErrorTracker {
   constructor(
     private readonly logger: Logger,
     private readonly configService: ConfigService,
   ) {
-    this.logger.setContext(SentryService.name);
+    this.logger.setContext(SentryErrorTrackerService.name);
 
     const serverConfig = this.configService.get<ServerConfig>(
       ConfigIdentifier.Server,
@@ -34,7 +35,7 @@ export class SentryService {
     });
   }
 
-  async trackError(error: Error): Promise<void> {
+  trackError(error: Error) {
     Sentry.captureException(error);
   }
 

@@ -6,14 +6,14 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
-import { SentryModule } from './sentry/sentry.module';
+import { SentryErrorTrackerModule } from './error-tracker/sentry-error-tracker/sentry-error-tracker.module';
 
 @Module({
   imports: [
     LoggerModule,
     ConfigurationModule,
     DatabaseModule,
-    SentryModule,
+    SentryErrorTrackerModule,
     CommonModule,
     TodosModule,
     AccountsModule,
