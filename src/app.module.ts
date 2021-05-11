@@ -8,6 +8,8 @@ import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { SentryErrorTrackerModule } from './error-tracker/sentry-error-tracker/sentry-error-tracker.module';
 
+const ALL_ROUTES = '*';
+
 @Module({
   imports: [
     LoggerModule,
@@ -21,6 +23,6 @@ import { SentryErrorTrackerModule } from './error-tracker/sentry-error-tracker/s
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes(ALL_ROUTES);
   }
 }
