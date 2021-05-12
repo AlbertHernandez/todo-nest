@@ -1,4 +1,4 @@
-import { Global, MiddlewareConsumer, Module } from '@nestjs/common';
+import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LoggerService } from './logger.service';
 import { LoggerMiddleware } from './logger.middleware';
 import { ALL_ROUTES } from '../routes/routes.constants';
@@ -8,7 +8,7 @@ import { ALL_ROUTES } from '../routes/routes.constants';
   providers: [LoggerService],
   exports: [LoggerService],
 })
-export class LoggerModule {
+export class LoggerModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes(ALL_ROUTES);
   }
