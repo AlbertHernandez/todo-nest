@@ -22,7 +22,6 @@ import { ERROR_TRACKER_SERVICE } from 'src/server/error-tracker/constants';
       provide: APP_INTERCEPTOR,
       useClass: ErrorHandlerInterceptor,
     },
-    Logger,
   ],
 })
 export class ErrorHandlerModule {}
