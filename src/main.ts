@@ -1,18 +1,20 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { UnifiedResponseInterceptor } from './common/interceptors/unified-response.interceptor';
-import { requestIdMiddleware } from './common/middlewares';
-import { ConfigIdentifier } from './configuration/constants';
+import { ServerModule } from './server/server.module';
+import { UnifiedRequestResponseInterceptor } from './server/request/unified-request-response.interceptor';
+import { ConfigIdentifier } from './server/configuration/constants';
 import * as helmet from 'helmet';
+import { correlationIdMiddleware } from './server/request/correlation-id.middleware';
+import { API } from './server/server.constants';
+import { ServerConfig } from './server/configuration/interfaces';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = await NestFactory.create(ServerModule);
 
-  app.useGlobalInterceptors(new UnifiedResponseInterceptor());
+  server.useGlobalInterceptors(new UnifiedRequestResponseInterceptor());
 
-  app.useGlobalPipes(
+  server.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
@@ -20,19 +22,19 @@ async function bootstrap() {
     }),
   );
 
-  app.setGlobalPrefix('api');
+  server.setGlobalPrefix(API);
 
-  app.use(requestIdMiddleware(), helmet());
+  server.use(correlationIdMiddleware(), helmet());
 
-  const configService = app.get(ConfigService);
+  const configService = server.get(ConfigService);
 
-  const server = configService.get(ConfigIdentifier.Server);
+  const serverConfig = configService.get<ServerConfig>(ConfigIdentifier.Server);
 
-  await app.listen(server.port);
+  await server.listen(serverConfig.port);
 
-  const logger = app.get(Logger);
+  const logger = server.get(Logger);
 
-  logger.log(`Application is listening on port ${server.port}.`);
+  logger.log(`Server is listening on port ${serverConfig.port}.`);
 }
 
 bootstrap();
